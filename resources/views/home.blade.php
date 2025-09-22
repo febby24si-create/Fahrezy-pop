@@ -22,8 +22,8 @@
         }
 
         .hero-section {
-            background-color: #3187e9;
-            color: white;
+            background-color: #205A28;
+            color: #C72B32);
             padding: 50px 0;
             text-align: center;
         }
@@ -40,14 +40,14 @@
         .footer {
             margin-top: 50px;
             padding: 20px 0;
-            background-color: #f8f9fa;
+            background-color: #1be400;
             text-align: center;
         }
 
-        .footer p {
+        .footer{
             margin: 0;
             font-size: 0.9rem;
-            color: #6c757d;
+            color: #000000;
         }
     </style>
 </head>
@@ -83,7 +83,7 @@
     <section class="hero-section">
         <div class="container">
            <!--before -->
-                <h1>Welcome to My App</h1>
+                <h1>Welcome Admin</h1>
 
             <!--after-->
                 <h1> {{ $username }} </h1>
