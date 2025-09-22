@@ -12,43 +12,44 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-       // Data Pegawai
-        $pegawai = [
-            'name' => 'Febbyta Sari', // Nama Pegawai
-            'birth_date' => '2007-03-25', // Tanggal Lahir Pegawai
-            'hobbies' => ['Membaca', 'Menonton Film', 'Memasak', 'Menulis', 'Berpetualang'],
-            'tgl_harus_wisuda' => '2028-09-30', // Tanggal Harus Wisuda
-            'current_semester' => 3, // Semester saat ini
-            'future_goal' => 'Menjadi pengusaha sukses',
+  // Data dasar
+        $name = "Fahrezy";
+        $tglLahir = Carbon::create(2003, 9, 1); // contoh tanggal lahir
+        $tglHarusWisuda = Carbon::create(2026, 8, 30); // contoh tanggal wisuda
+        $currentSemester = 4;
+        $futureGoal = "Menjadi Fullstack Developer";
+
+        // Hitung umur
+        $myAge = $tglLahir->age;
+
+        // Hitung jarak hari dari hari ini ke tgl harus wisuda
+        $timeToStudyLeft = now()->diffInDays($tglHarusWisuda, false);
+
+        // Hobi minimal 5 item
+        $hobbies = [
+            "Membaca",
+            "Ngoding",
+            "Main Musik",
+            "Olahraga",
+            "Nonton Film"
         ];
 
-        // Menghitung umur berdasarkan tanggal lahir
-        $birthDate = Carbon::parse($pegawai['birth_date']);
-        $age = $birthDate->age; // Umur Pegawai
+        // Pesan motivasi sesuai semester
+        $motivasi = $currentSemester < 3
+            ? "Masih Awal, Kejar TAK"
+            : "Jangan main-main, kurang-kurangi main game!";
 
-        // Menghitung jarak hari dari tanggal wisuda
-        $tglHarusWisuda = Carbon::parse($pegawai['tgl_harus_wisuda']);
-        $timeToStudyLeft = $tglHarusWisuda->diffInDays(Carbon::now());  // Menggunakan diffInDays()
-
-        // Menentukan pesan berdasarkan semester
-        $semesterMessage = $pegawai['current_semester'] < 3
-            ? 'Masih Awal, Kejar TAK'
-            : 'Jangan main-main, kurang-kurangi main game!';
-
-        // Menyusun data yang akan ditampilkan
-        $data = [
-            'name' => $pegawai['name'],
-            'my_age' => $age,
-            'hobbies' => $pegawai['hobbies'],
-            'tgl_harus_wisuda' => $pegawai['tgl_harus_wisuda'],
+        // Passing data ke view
+        return view('pegawai.index', [
+            'name' => $name,
+            'my_age' => $myAge,
+            'hobbies' => $hobbies,
+            'tgl_harus_wisuda' => $tglHarusWisuda->toDateString(),
             'time_to_study_left' => $timeToStudyLeft,
-            'current_semester' => $pegawai['current_semester'],
-            'semester_message' => $semesterMessage,
-            'future_goal' => $pegawai['future_goal']
-        ];
-
-        // Menampilkan data dalam bentuk JSON
-        return response()->json($data);
+            'current_semester' => $currentSemester,
+            'motivasi' => $motivasi,
+            'future_goal' => $futureGoal
+        ]);
     }
 
     /**
