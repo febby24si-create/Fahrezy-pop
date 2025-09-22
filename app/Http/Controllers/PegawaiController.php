@@ -14,9 +14,9 @@ class PegawaiController extends Controller
     {
   // Data dasar
         $name = "Fahrezy";
-        $tglLahir = Carbon::create(2003, 9, 1); // contoh tanggal lahir
+        $tglLahir = Carbon::create(2006, 2, 25); // contoh tanggal lahir
         $tglHarusWisuda = Carbon::create(2026, 8, 30); // contoh tanggal wisuda
-        $currentSemester = 4;
+        $currentSemester = 3; //  semester saat ini
         $futureGoal = "Menjadi Fullstack Developer";
 
         // Hitung umur
