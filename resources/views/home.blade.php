@@ -8,6 +8,7 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/custom-style.css') }}">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -23,7 +24,7 @@
 
         .hero-section {
             background-color: #67b0d1;
-            color: #C72B32);
+            color: #C72B32;
             padding: 50px 0;
             text-align: center;
         }
@@ -56,7 +57,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">My Laravel App</a>
+            <a class="navbar-brand font-custom" href="#">My Laravel App</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -82,6 +83,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">
+              <img src="{{ asset('/assets/images/Logo.png') }}" alt="Logo" width="100" class="mb-3">
            <!--before -->
                 <h1>Welcome Admin</h1>
 
@@ -98,6 +100,7 @@
                 {{-- About --}}
                 <div class="card mb-4">
                     <div class="card-body">
+                        <img src="{{ asset('/assets/images/logo.png') }}" alt="Logo" width="150" class="mb-2">
                         <h5 class="card-title">About Our Application</h5>
                         <p class="card-text">Our application provides a clean and intuitive interface, allowing users to navigate easily and perform tasks efficiently. Built with Laravel and Bootstrap, it offers flexibility and responsiveness.</p>
                         <a href="#" class="btn btn-primary">Explore More</a>
@@ -259,6 +262,7 @@
     <footer class="footer">
         <div class="container">
             <p>&copy; {{date('Y')}} My Laravel App. All Rights Reserved.</p>
+            <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" width="80">
         </div>
     </footer>
 
