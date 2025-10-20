@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pelanggan;
-use Illuminate\Http\Request;
 
-class PelangganController extends Controller
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data['dataPelanggan'] = Pelanggan::all();
-        return view('admin.pelanggan.index', $data);
+        $data['dataUser'] = User::all();
+		return view('admin.user.index',$data);
     }
 
     /**
@@ -21,7 +23,7 @@ class PelangganController extends Controller
      */
     public function create()
     {
-        return view('admin.pelanggan.create');
+        return view ('admin.user.create');
     }
 
     /**
@@ -29,18 +31,14 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        $data['name'] = $request->first_name;
+        $data['email'] = $request->last_name;
+        $data['password'] = Hash::make($request->password);
+        $data['password_confirmation'] = $request->gender;
 
-        $data['first_name'] = $request->first_name;
-        $data['last_name'] = $request->last_name;
-        $data['birthday'] = $request->birthday;
-        $data['gender'] = $request->gender;
-        $data['email'] = $request->email;
-        $data['phone'] = $request->phone;
+        User::create($data);
 
-        Pelanggan::create($data);
-
-        return redirect()->route('pelanggan.create')->with('success', 'Penambahan Data Berhasil!');
+        return redirect()->route('user.create')->with('success', 'Penambahan Data Berhasil!');
     }
 
     /**
@@ -56,8 +54,7 @@ class PelangganController extends Controller
      */
     public function edit(string $id)
     {
-        $data['dataPelanggan'] = Pelanggan::findOrFail($id);
-        return view('admin.pelanggan.edit', $data);
+        //
     }
 
     /**

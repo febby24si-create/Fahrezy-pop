@@ -15,13 +15,13 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item"><a href="{{ route('pelanggan.index') }}">Pelanggan</a></li>
-                <li class="breadcrumb-item active" aria-current="Tambah Pelanggan">Tambah Pelanggan</li>
+                <li class="breadcrumb-item active" aria-current="Edit Pelanggan">Edit Pelanggan</li>
             </ol>
         </nav>
         <div class="d-flex justify-content-between w-100 flex-wrap">
             <div class="mb-3 mb-lg-0">
-                <h1 class="h4">Tambah Pelanggan</h1>
-                <p class="mb-0">Tambahkan data pelanggan baru ke sistem.</p>
+                <h1 class="h4">Edit Pelanggan</h1>
+                <p class="mb-0">Ubah data pelanggan yang dipilih.</p>
             </div>
             <div>
                 <a href="{{ route('pelanggan.index') }}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i> Kembali</a>
@@ -33,8 +33,9 @@
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <div class="card-body">
-                    <form action="{{ route('pelanggan.store') }}" method="POST">
+                    <form action="{{ route('pelanggan.update', $dataPelanggan->pelanggan_id) }}" method="POST">
                         @csrf
+                        @method('PUT')
 
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -54,7 +55,7 @@
                             <div class="col-md-6 col-lg-4 mb-3">
                                 <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name"
-                                    value="{{ old('first_name') }}" placeholder="Masukkan nama depan" required>
+                                    value="{{ old('first_name', $dataPelanggan->first_name) }}" placeholder="Masukkan nama depan" required>
                                 @error('first_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -63,7 +64,7 @@
                             <div class="col-md-6 col-lg-4 mb-3">
                                 <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name"
-                                    value="{{ old('last_name') }}" placeholder="Masukkan nama belakang" required>
+                                    value="{{ old('last_name', $dataPelanggan->last_name) }}" placeholder="Masukkan nama belakang" required>
                                 @error('last_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -81,7 +82,7 @@
                                         </svg>
                                     </span>
                                     <input type="date" class="form-control @error('birthday') is-invalid @enderror" id="birthday" name="birthday"
-                                        value="{{ old('birthday') }}" required>
+                                        value="{{ old('birthday', $dataPelanggan->birthday) }}" required>
                                     @error('birthday')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -92,8 +93,8 @@
                                 <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
                                 <select class="form-select @error('gender') is-invalid @enderror" id="gender" name="gender" required>
                                     <option value="">-- Pilih Gender --</option>
-                                    <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Laki-laki</option>
-                                    <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Perempuan</option>
+                                    <option value="Male" {{ old('gender', $dataPelanggan->gender) == 'Male' ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="Female" {{ old('gender', $dataPelanggan->gender) == 'Female' ? 'selected' : '' }}>Perempuan</option>
                                 </select>
                                 @error('gender')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -103,7 +104,7 @@
                             <div class="col-md-6 col-lg-4 mb-3">
                                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
-                                    value="{{ old('email') }}" placeholder="Masukkan alamat email" required>
+                                    value="{{ old('email', $dataPelanggan->email) }}" placeholder="Masukkan alamat email" required>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -112,7 +113,7 @@
                             <div class="col-md-6 col-lg-4 mb-3">
                                 <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone"
-                                    value="{{ old('phone') }}" placeholder="Masukkan nomor telepon" required>
+                                    value="{{ old('phone', $dataPelanggan->phone) }}" placeholder="Masukkan nomor telepon" required>
                                 @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -121,7 +122,7 @@
 
                         <div class="mt-4">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i> Simpan
+                                <i class="fas fa-save me-1"></i> Update
                             </button>
                             <a href="{{ route('pelanggan.index') }}" class="btn btn-outline-secondary ms-2">
                                 <i class="fas fa-times me-1"></i> Batal
