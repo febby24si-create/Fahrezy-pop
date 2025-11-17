@@ -14,7 +14,7 @@ class PelangganController extends Controller
     {
         $filterableColumns = ['gender'];
 
-        $searchableColumns = ['first_name'];
+        $searchableColumns = ['first_name', 'last_name', 'email'];
 
         $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns)
         ->search($request,$searchableColumns)

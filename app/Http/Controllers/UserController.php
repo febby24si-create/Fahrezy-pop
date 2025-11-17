@@ -2,74 +2,93 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $data['dataUser'] = User::all();
-		return view('admin.user.index',$data);
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function index(Request $request)
+    {
+        $query = User::query();
+        // FILTER GENDER
+        if ($request->gender) {
+            $query->where('gender', $request->gender);
+        }
+        // Search
+        if ($request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+
+        $data['dataUser'] = $query->paginate(10)->withQueryString();
+
+        return view('admin.user.index', $data);
+    }
     public function create()
     {
-        return view ('admin.user.create');
+        return view('admin.user.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $data['name'] = $request->first_name;
-        $data['email'] = $request->last_name;
-        $data['password'] = Hash::make($request->password);
-        $data['password_confirmation'] = $request->gender;
+        $request->validate([
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'email'      => 'required|email|unique:users,email',
+            'password'   => 'required|min:6'
+        ]);
 
-        User::create($data);
+        User::create([
+            'name'     => $request->first_name . ' ' . $request->last_name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => $request->role ?? 'pegawai',
+            'status'   => $request->status ?? 'active',
+        ]);
 
-        return redirect()->route('user.create')->with('success', 'Penambahan Data Berhasil!');
+        return redirect()->route('user.index')->with('success', 'User berhasil dibuat!');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $dataUser = User::findOrFail($id);
+
+        return view('admin.user.edit', compact('dataUser'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        // Validasi
+        $request->validate([
+            'name'  => 'required',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role'  => 'required|in:admin,pegawai',
+            'status' => 'required|in:active,inactive',
+            'password' => 'nullable|min:6|confirmed'
+        ]);
+
+        // Update data
+        $user->name  = $request->name;
+        $user->email = $request->email;
+        $user->role  = $request->role;
+        $user->status = $request->status;
+
+        // Update password jika diisi
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('user.index')->with('success', 'User berhasil diupdate!');
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $user = User::findOrFail($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'User berhasil dihapus!');
     }
 }
