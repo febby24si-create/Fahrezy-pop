@@ -13,12 +13,27 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create();
 
+        // Buat 1 admin default
+        User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password123'),
+            'role' => 'admin',
+            'status' => 'active',
+        ]);
+
+        // Buat 1000 user lainnya
         for ($i = 0; $i < 1000; $i++) {
             User::create([
                 'name' => $faker->firstName . ' ' . $faker->lastName,
                 'email' => $faker->unique()->safeEmail(),
                 'password' => Hash::make('password123'),
+                'role' => $faker->randomElement(['admin', 'pegawai']),
+                'status' => $faker->randomElement(['active', 'inactive']),
             ]);
         }
+
+        // Reset faker unique cache
+        $faker->unique(true);
     }
 }
