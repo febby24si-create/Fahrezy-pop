@@ -125,60 +125,102 @@
                             </div>
 
                             <!-- Daftar File -->
-                            <h6>Daftar File Terupload</h6>
+                            <h6 class="mb-3">Daftar File Pendukung ({{ $files->count() }})</h6>
                             @if($files->count() > 0)
                                 <div class="row">
                                     @foreach($files as $file)
-                                        <div class="col-md-6 mb-3">
-                                            <div class="card file-card">
-                                                <div class="card-body text-center">
-                                                    @php
-                                                        $extension = strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION));
-                                                        $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']);
-                                                    @endphp
-                                                    
-                                                    @if($isImage)
-                                                        <img src="{{ asset('storage/' . $file->file_path) }}" 
-                                                             alt="{{ $file->original_name }}" 
-                                                             class="img-thumbnail mb-2" 
-                                                             style="max-height: 100px; object-fit: cover;">
-                                                    @else
-                                                        <div class="file-icon mb-2">
-                                                            @if($extension == 'pdf')
-                                                                <i class="fas fa-file-pdf fa-2x text-danger"></i>
-                                                            @elseif(in_array($extension, ['doc', 'docx']))
-                                                                <i class="fas fa-file-word fa-2x text-primary"></i>
-                                                            @elseif(in_array($extension, ['xls', 'xlsx']))
-                                                                <i class="fas fa-file-excel fa-2x text-success"></i>
-                                                            @else
-                                                                <i class="fas fa-file fa-2x text-secondary"></i>
-                                                            @endif
+                                        <div class="col-lg-4 col-md-6 mb-4">
+                                            <div class="card file-card h-100">
+                                                <div class="card-body">
+                                                    <!-- File Icon/Thumbnail -->
+                                                    <div class="text-center mb-3">
+                                                        @php
+                                                            $extension = strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION));
+                                                            $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']);
+                                                            $fileTypes = [
+                                                                'pdf' => ['icon' => 'file-pdf', 'color' => 'danger', 'bg' => 'bg-danger-light'],
+                                                                'doc' => ['icon' => 'file-word', 'color' => 'primary', 'bg' => 'bg-primary-light'],
+                                                                'docx' => ['icon' => 'file-word', 'color' => 'primary', 'bg' => 'bg-primary-light'],
+                                                                'xls' => ['icon' => 'file-excel', 'color' => 'success', 'bg' => 'bg-success-light'],
+                                                                'xlsx' => ['icon' => 'file-excel', 'color' => 'success', 'bg' => 'bg-success-light'],
+                                                                'zip' => ['icon' => 'file-archive', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'rar' => ['icon' => 'file-archive', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'default' => ['icon' => 'file', 'color' => 'secondary', 'bg' => 'bg-secondary-light']
+                                                            ];
+                                                            
+                                                            $fileType = $fileTypes[$extension] ?? $fileTypes['default'];
+                                                        @endphp
+                                                        
+                                                        @if($isImage)
+                                                            <div class="file-thumbnail mb-2">
+                                                                <img src="{{ asset('storage/' . $file->file_path) }}" 
+                                                                     alt="{{ $file->original_name }}" 
+                                                                     class="rounded img-fluid"
+                                                                     style="max-height: 120px; width: auto; object-fit: cover;"
+                                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                                <div class="file-icon-placeholder {{ $fileType['bg'] }} rounded d-none" 
+                                                                     style="height: 120px; display: flex; align-items: center; justify-content: center;">
+                                                                    <i class="fas fa-{{ $fileType['icon'] }} fa-3x text-{{ $fileType['color'] }}"></i>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div class="file-icon {{ $fileType['bg'] }} rounded p-4 mb-2">
+                                                                <i class="fas fa-{{ $fileType['icon'] }} fa-3x text-{{ $fileType['color'] }}"></i>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- File Info -->
+                                                    <div class="file-info text-center">
+                                                        <h6 class="file-name text-truncate" title="{{ $file->original_name }}">
+                                                            {{ $file->original_name }}
+                                                        </h6>
+                                                        <small class="text-muted">
+                                                            {{ strtoupper($extension) }} • 
+                                                            {{ \Carbon\Carbon::parse($file->created_at)->format('d/m/Y H:i') }}
+                                                        </small>
+                                                    </div>
+
+                                                    <!-- Action Buttons -->
+                                                    <div class="file-actions mt-3">
+                                                        <div class="btn-group w-100" role="group">
+                                                            <!-- Preview Button -->
+                                                            <a href="{{ asset('storage/' . $file->file_path) }}" 
+                                                               target="_blank" 
+                                                               class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center"
+                                                               data-bs-toggle="tooltip"
+                                                               data-bs-placement="top"
+                                                               title="Lihat File">
+                                                                <i class="fas fa-eye me-1"></i>
+                                                                <span class="d-none d-sm-inline">Lihat</span>
+                                                            </a>
+                                                            
+                                                            <!-- Download Button -->
+                                                            <a href="{{ asset('storage/' . $file->file_path) }}" 
+                                                               download="{{ $file->original_name }}"
+                                                               class="btn btn-outline-success btn-sm d-flex align-items-center justify-content-center"
+                                                               data-bs-toggle="tooltip"
+                                                               data-bs-placement="top"
+                                                               title="Download File">
+                                                                <i class="fas fa-download me-1"></i>
+                                                                <span class="d-none d-sm-inline">Download</span>
+                                                            </a>
+                                                            
+                                                            <!-- Delete Button -->
+                                                            <form action="{{ route('multipleupload.destroy', $file->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" 
+                                                                        class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center"
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-bs-placement="top"
+                                                                        title="Hapus File"
+                                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus file {{ $file->original_name }}?')">
+                                                                    <i class="fas fa-trash me-1"></i>
+                                                                    <span class="d-none d-sm-inline">Hapus</span>
+                                                                </button>
+                                                            </form>
                                                         </div>
-                                                    @endif
-                                                    
-                                                    <p class="small text-truncate mb-1" title="{{ $file->original_name }}">
-                                                        {{ $file->original_name }}
-                                                    </p>
-                                                    
-                                                    <div class="btn-group btn-group-sm" role="group">
-                                                        <a href="{{ asset('storage/' . $file->file_path) }}" 
-                                                           target="_blank" 
-                                                           class="btn btn-outline-primary">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                        <a href="{{ asset('storage/' . $file->file_path) }}" 
-                                                           download="{{ $file->original_name }}"
-                                                           class="btn btn-outline-success">
-                                                            <i class="fas fa-download"></i>
-                                                        </a>
-                                                        <form action="{{ route('multipleupload.destroy', $file->id) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-outline-danger" 
-                                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus file ini?')">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -186,8 +228,12 @@
                                     @endforeach
                                 </div>
                             @else
-                                <div class="alert alert-info">
-                                    <i class="fas fa-info-circle me-2"></i>Belum ada file pendukung.
+                                <div class="text-center py-5">
+                                    <div class="empty-state">
+                                        <i class="fas fa-folder-open fa-4x text-muted mb-3"></i>
+                                        <h5 class="text-muted">Belum ada file pendukung</h5>
+                                        <p class="text-muted">Upload file pertama Anda dengan form di atas</p>
+                                    </div>
                                 </div>
                             @endif
                         </div>
@@ -199,16 +245,123 @@
 
     <style>
         .file-card {
-            transition: transform 0.2s;
+            border: 1px solid #e3f2fd;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
         }
+        
         .file-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #2196F3;
         }
+        
         .file-icon {
-            height: 60px;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .file-card:hover .file-icon {
+            transform: scale(1.05);
+        }
+        
+        .file-thumbnail {
+            position: relative;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .file-thumbnail img {
+            transition: transform 0.3s ease;
+        }
+        
+        .file-card:hover .file-thumbnail img {
+            transform: scale(1.05);
+        }
+        
+        .file-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+        
+        .file-actions .btn-group {
+            gap: 1px;
+        }
+        
+        .file-actions .btn {
+            flex: 1;
+            padding: 0.375rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 0;
+            transition: all 0.2s ease;
+        }
+        
+        .file-actions .btn:first-child {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+        }
+        
+        .file-actions .btn:last-child {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+        }
+        
+        .file-actions .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Background colors for file types */
+        .bg-danger-light { background-color: rgba(220, 53, 69, 0.1); }
+        .bg-primary-light { background-color: rgba(13, 110, 253, 0.1); }
+        .bg-success-light { background-color: rgba(25, 135, 84, 0.1); }
+        .bg-warning-light { background-color: rgba(255, 193, 7, 0.1); }
+        .bg-secondary-light { background-color: rgba(108, 117, 125, 0.1); }
+        
+        .empty-state {
+            opacity: 0.7;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .file-actions .btn span {
+                display: none;
+            }
+            
+            .file-actions .btn i {
+                margin-right: 0 !important;
+            }
+            
+            .file-name {
+                font-size: 0.8rem;
+            }
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            document.querySelectorAll('.file-thumbnail img').forEach(function(img) {
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
+                    var placeholder = this.nextElementSibling;
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
