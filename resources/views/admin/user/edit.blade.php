@@ -36,7 +36,7 @@
         <div class="card border-0 shadow components-section">
             <div class="card-body">
 
-                <form action="{{ route('user.update', $dataUser->id) }}" method="POST">
+                <form action="{{ route('user.update', $dataUser->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -86,6 +86,30 @@
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        {{-- Profile Picture --}}
+                        <div class="col-md-6 mb-3">
+                            <label for="profile_picture" class="form-label">Foto Profil</label>
+                            <input 
+                                type="file" 
+                                class="form-control @error('profile_picture') is-invalid @enderror" 
+                                id="profile_picture" 
+                                name="profile_picture"
+                                accept="image/*">
+                            @error('profile_picture')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <small class="text-muted">Format: JPEG, PNG, JPG, GIF. Maksimal: 2MB</small>
+                            
+                            @if ($dataUser->profile_picture)
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/' . $dataUser->profile_picture) }}" 
+                                         alt="Profile Picture" 
+                                         class="img-thumbnail" 
+                                         width="100">
+                                </div>
+                            @endif
                         </div>
 
                         {{-- Password --}}

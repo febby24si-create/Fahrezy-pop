@@ -38,7 +38,7 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <form action="{{ route('user.store') }}" method="POST">
+                <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="row mb-4">
@@ -55,6 +55,13 @@
                                 <input type="text" class="form-control" id="last_name" name="last_name" required>
                             </div>
 
+                            <!-- Profile Picture -->
+                            <div class="mb-4">
+                                <label for="profile_picture">Foto Profil</label>
+                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
+                                <small class="text-muted">Format: JPEG, PNG, JPG, GIF. Maksimal: 2MB</small>
+                            </div>
+
                         </div>
 
                         <div class="col-lg-6">
@@ -68,6 +75,24 @@
                             <div class="mb-4">
                                 <label for="password">Password *</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <!-- Role -->
+                            <div class="mb-4">
+                                <label for="role">Role</label>
+                                <select class="form-control" id="role" name="role">
+                                    <option value="pegawai">Pegawai</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="mb-4">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
                             </div>
 
                         </div>

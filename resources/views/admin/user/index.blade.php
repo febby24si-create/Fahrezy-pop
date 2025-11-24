@@ -50,17 +50,44 @@
                     <table class="table table-centered table-nowrap mb-0 rounded">
                         <thead class="thead-light">
                             <tr>
+                                <th class="border-0">Foto Profil</th>
                                 <th class="border-0">Nama Lengkap</th>
                                 <th class="border-0">Email</th>
+                                <th class="border-0">Role</th>
+                                <th class="border-0">Status</th>
                                 <th class="border-0 rounded-end">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($dataUser as $item)
                                 <tr>
+                                    <td>
+                                        @if ($item->profile_picture)
+                                            <img src="{{ asset('storage/' . $item->profile_picture) }}" 
+                                                 alt="Profile Picture" 
+                                                 class="rounded-circle" 
+                                                 width="40" 
+                                                 height="40"
+                                                 style="object-fit: cover;">
+                                        @else
+                                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white fw-bold"
+                                                 style="width: 40px; height: 40px;">
+                                                {{ strtoupper(substr($item->name, 0, 1)) }}
+                                            </div>
+                                        @endif
+                                    </td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->email }}</td>
-
+                                    <td>
+                                        <span class="badge {{ $item->role == 'admin' ? 'bg-danger' : 'bg-primary' }}">
+                                            {{ ucfirst($item->role) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ $item->status == 'active' ? 'bg-success' : 'bg-warning' }}">
+                                            {{ ucfirst($item->status) }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <a href="{{ route('user.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
