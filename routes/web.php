@@ -3,13 +3,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MultipleUploadController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -45,3 +46,11 @@ Route::resource('pelanggan', PelangganController::class);
 
 Route::resource('user', UserController::class);
 
+// Routes untuk multiple upload
+Route::post('/multiple-upload', [App\Http\Controllers\MultipleUploadController::class, 'store'])->name('multipleupload.store');
+Route::delete('/multiple-upload/{id}', [App\Http\Controllers\MultipleUploadController::class, 'destroy'])->name('multipleupload.destroy');
+
+// Route untuk show detail pelanggan
+Route::get('/pelanggan/{id}', [App\Http\Controllers\PelangganController::class, 'show'])->name('pelanggan.show');
+// Route untuk show detail pelanggan (jika belum ada)
+Route::get('/pelanggan/{id}', [PelangganController::class, 'show'])->name('pelanggan.show');

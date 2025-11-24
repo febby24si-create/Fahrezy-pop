@@ -55,7 +55,14 @@ class PelangganController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data['dataPelanggan'] = Pelanggan::findOrFail($id);
+
+        // Ambil file-file yang terkait dengan pelanggan ini
+        $data['files'] = \App\Models\MultipleUpload::where('ref_table', 'pelanggan')
+            ->where('ref_id', $id)
+            ->get();
+
+        return view('admin.pelanggan.show', $data);
     }
 
     /**

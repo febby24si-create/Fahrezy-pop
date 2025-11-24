@@ -81,6 +81,7 @@
                                     <th class="border-0">Gender</th>
                                     <th class="border-0">Email</th>
                                     <th class="border-0">Phone</th>
+                                    <th class="border-0">Files</th>
                                     <th class="border-0 rounded-end">Action</th>
                                 </tr>
                             </thead>
@@ -95,6 +96,25 @@
                                     <td>{{ $pelanggan->email }}</td>
                                     <td>{{ $pelanggan->phone }}</td>
                                     <td>
+                                        @php
+                                            $filesCount = \App\Models\MultipleUpload::where('ref_table', 'pelanggan')
+                                                ->where('ref_id', $pelanggan->pelanggan_id)
+                                                ->count();
+                                        @endphp
+                                        @if($filesCount > 0)
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-file me-1"></i> {{ $filesCount }} file
+                                            </span>
+                                        @else
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-file me-1"></i> 0 file
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('pelanggan.show', $pelanggan->pelanggan_id) }}" class="btn btn-sm btn-info me-1">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </a>
                                         <a href="{{ route('pelanggan.edit', $pelanggan->pelanggan_id) }}" class="btn btn-sm btn-primary me-1">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
@@ -109,7 +129,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="8" class="text-center py-4">
+                                    <td colspan="9" class="text-center py-4">
                                         <div class="text-muted">
                                             <i class="fas fa-users fa-3x mb-3"></i>
                                             <p>Belum ada data pelanggan</p>
