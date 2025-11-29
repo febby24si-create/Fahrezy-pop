@@ -17,6 +17,13 @@ class Pelanggan extends Model
         'email',
         'phone',
     ];
+    // Tambahkan relasi ke MultipleUpload
+    public function files()
+    {
+        return $this->hasMany(MultipleUpload::class, 'ref_id')
+            ->where('ref_table', 'pelanggan');
+    }
+
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
     {
         foreach ($filterableColumns as $column) {

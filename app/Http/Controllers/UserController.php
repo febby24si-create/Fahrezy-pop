@@ -12,17 +12,25 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = User::query();
-        // FILTER GENDER
-        if ($request->gender) {
-            $query->where('gender', $request->gender);
-        }
-        // Search
+
+        // SEARCH
         if ($request->search) {
             $query->where('name', 'like', '%' . $request->search . '%')
                 ->orWhere('email', 'like', '%' . $request->search . '%');
         }
 
+        // FILTER ROLE
+        if ($request->role && $request->role != 'all') {
+            $query->where('role', $request->role);
+        }
+
+        // FILTER STATUS
+        if ($request->status && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+
         $data['dataUser'] = $query->paginate(10)->withQueryString();
+        $data['filters'] = $request->only(['search', 'role', 'status']);
 
         return view('admin.user.index', $data);
     }
