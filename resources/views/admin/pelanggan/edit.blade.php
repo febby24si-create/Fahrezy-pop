@@ -33,6 +33,7 @@
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <div class="card-body">
+                    <!-- Form Edit Data Pelanggan -->
                     <form action="{{ route('pelanggan.update', $dataPelanggan->pelanggan_id) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -118,27 +119,46 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                                                    <!-- File Upload Section -->
-                        <div class="col-md-6">
-                            <h5 class="mb-3">File Pendukung</h5>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Update Data Pelanggan
+                            </button>
+                            <a href="{{ route('pelanggan.index') }}" class="btn btn-outline-secondary ms-2">
+                                <i class="fas fa-times me-1"></i> Batal
+                            </a>
+                        </div>
+                    </form>
+
+                    <!-- Form Upload File (Terpisah) -->
+                    <hr class="my-5">
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="mb-3">Upload File Pendukung</h5>
                             
                             <!-- Form Upload File -->
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <form action="{{ route('multipleupload.store') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('multipleupload.store') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                                         @csrf
                                         <input type="hidden" name="ref_table" value="pelanggan">
                                         <input type="hidden" name="ref_id" value="{{ $dataPelanggan->pelanggan_id }}">
                                         
                                         <div class="mb-3">
-                                            <label for="files" class="form-label">Upload File Pendukung</label>
+                                            <label for="files" class="form-label">Upload File Pendukung (Dokumen, Gambar, Video)</label>
                                             <input type="file" class="form-control @error('files.*') is-invalid @enderror" 
                                                    id="files" name="files[]" multiple required>
                                             @error('files.*')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                             <div class="form-text">
-                                                Format yang didukung: JPG, JPEG, PNG, GIF, PDF, DOC, DOCX, XLS, XLSX. Maksimal 2MB per file.
+                                                Format yang didukung: 
+                                                <strong>Dokumen:</strong> PDF, DOC, DOCX, XLS, XLSX | 
+                                                <strong>Gambar:</strong> JPG, JPEG, PNG, GIF | 
+                                                <strong>Video:</strong> MP4, AVI, MOV, WMV, FLV, WEBM.
+                                                Maksimal 50MB per file.
                                             </div>
                                         </div>
                                         
@@ -149,26 +169,34 @@
                                 </div>
                             </div>
 
-<!-- Menjadi: -->
-<h6 class="mb-3">Daftar File Pendukung ({{ $dataPelanggan->files->count() }})</h6>
-@if($dataPelanggan->files->count() > 0)
-    @foreach($dataPelanggan->files as $file)
+                            <!-- Daftar File -->
+                            <h6 class="mb-3">Daftar File Pendukung ({{ $dataPelanggan->files->count() }})</h6>
+                            @if($dataPelanggan->files->count() > 0)
+                                <div class="row">
+                                    @foreach($dataPelanggan->files as $file)
                                         <div class="col-lg-4 col-md-6 mb-4">
                                             <div class="card file-card h-100">
                                                 <div class="card-body">
-                                                    <!-- File Icon/Thumbnail -->
+                                                    <!-- File Icon/Thumbnail/Video Player -->
                                                     <div class="text-center mb-3">
                                                         @php
                                                             $extension = strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION));
                                                             $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']);
+                                                            $isVideo = in_array($extension, ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm']);
                                                             $fileTypes = [
                                                                 'pdf' => ['icon' => 'file-pdf', 'color' => 'danger', 'bg' => 'bg-danger-light'],
                                                                 'doc' => ['icon' => 'file-word', 'color' => 'primary', 'bg' => 'bg-primary-light'],
                                                                 'docx' => ['icon' => 'file-word', 'color' => 'primary', 'bg' => 'bg-primary-light'],
                                                                 'xls' => ['icon' => 'file-excel', 'color' => 'success', 'bg' => 'bg-success-light'],
                                                                 'xlsx' => ['icon' => 'file-excel', 'color' => 'success', 'bg' => 'bg-success-light'],
-                                                                'zip' => ['icon' => 'file-archive', 'color' => 'warning', 'bg' => 'bg-warning-light'],
-                                                                'rar' => ['icon' => 'file-archive', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'mp4' => ['icon' => 'file-video', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'avi' => ['icon' => 'file-video', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'mov' => ['icon' => 'file-video', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'wmv' => ['icon' => 'file-video', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'flv' => ['icon' => 'file-video', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'webm' => ['icon' => 'file-video', 'color' => 'warning', 'bg' => 'bg-warning-light'],
+                                                                'zip' => ['icon' => 'file-archive', 'color' => 'secondary', 'bg' => 'bg-secondary-light'],
+                                                                'rar' => ['icon' => 'file-archive', 'color' => 'secondary', 'bg' => 'bg-secondary-light'],
                                                                 'default' => ['icon' => 'file', 'color' => 'secondary', 'bg' => 'bg-secondary-light']
                                                             ];
                                                             
@@ -181,11 +209,18 @@
                                                                      alt="{{ $file->original_name }}" 
                                                                      class="rounded img-fluid"
                                                                      style="max-height: 120px; width: auto; object-fit: cover;"
-                                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
                                                                 <div class="file-icon-placeholder {{ $fileType['bg'] }} rounded d-none" 
                                                                      style="height: 120px; display: flex; align-items: center; justify-content: center;">
                                                                     <i class="fas fa-{{ $fileType['icon'] }} fa-3x text-{{ $fileType['color'] }}"></i>
                                                                 </div>
+                                                            </div>
+                                                        @elseif($isVideo)
+                                                            <div class="file-video mb-2">
+                                                                <video controls style="max-height: 120px; width: 100%; border-radius: 8px;">
+                                                                    <source src="{{ asset('storage/' . $file->file_path) }}" type="video/{{ $extension }}">
+                                                                    Browser Anda tidak mendukung pemutar video.
+                                                                </video>
                                                             </div>
                                                         @else
                                                             <div class="file-icon {{ $fileType['bg'] }} rounded p-4 mb-2">
@@ -209,15 +244,27 @@
                                                     <div class="file-actions mt-3">
                                                         <div class="btn-group w-100" role="group">
                                                             <!-- Preview Button -->
-                                                            <a href="{{ asset('storage/' . $file->file_path) }}" 
-                                                               target="_blank" 
-                                                               class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center"
-                                                               data-bs-toggle="tooltip"
-                                                               data-bs-placement="top"
-                                                               title="Lihat File">
-                                                                <i class="fas fa-eye me-1"></i>
-                                                                <span class="d-none d-sm-inline">Lihat</span>
-                                                            </a>
+                                                            @if($isImage || $isVideo)
+                                                                <a href="{{ asset('storage/' . $file->file_path) }}" 
+                                                                   target="_blank" 
+                                                                   class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center"
+                                                                   data-bs-toggle="tooltip"
+                                                                   data-bs-placement="top"
+                                                                   title="Lihat File">
+                                                                    <i class="fas fa-eye me-1"></i>
+                                                                    <span class="d-none d-sm-inline">Lihat</span>
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ asset('storage/' . $file->file_path) }}" 
+                                                                   target="_blank" 
+                                                                   class="btn btn-outline-info btn-sm d-flex align-items-center justify-content-center"
+                                                                   data-bs-toggle="tooltip"
+                                                                   data-bs-placement="top"
+                                                                   title="Preview File">
+                                                                    <i class="fas fa-search me-1"></i>
+                                                                    <span class="d-none d-sm-inline">Preview</span>
+                                                                </a>
+                                                            @endif
                                                             
                                                             <!-- Download Button -->
                                                             <a href="{{ asset('storage/' . $file->file_path) }}" 
@@ -261,17 +308,7 @@
                                 </div>
                             @endif
                         </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i> Update
-                            </button>
-                            <a href="{{ route('pelanggan.index') }}" class="btn btn-outline-secondary ms-2">
-                                <i class="fas fa-times me-1"></i> Batal
-                            </a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

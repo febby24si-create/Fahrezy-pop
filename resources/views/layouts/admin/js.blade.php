@@ -39,3 +39,6 @@
     <!-- Volt JS -->
     <script src="{{ asset('assets-admin') }}/js/volt.js"></script>
     
+        <!-- Volt JS -->
+    <script src="{{ asset('assets-admin') }}/js/edit.js"></script>
+    

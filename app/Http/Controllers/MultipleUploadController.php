@@ -14,7 +14,7 @@ class MultipleUploadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'files.*' => 'required|file|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx|max:2048',
+            'files.*' => 'required|file|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,mp4,avi,mov,wmv,flv,webm|max:51200', // 50MB max
             'ref_table' => 'required|string',
             'ref_id' => 'required|integer'
         ]);
