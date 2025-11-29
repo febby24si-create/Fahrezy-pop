@@ -141,12 +141,26 @@
                             </tbody>
                         </table>
                     </div>                    
-                    <div class="mt-3 d-flex justify-content-end">
+                    {{-- <div class="mt-3 d-flex justify-content-end">
                         {{ $dataPelanggan->links('pagination::simple-bootstrap-5') }}
                     </div>
                     <div class="text-muted small">
                         Showing {{ $dataPelanggan->firstItem() }} to {{ $dataPelanggan->lastItem() }} of {{ $dataPelanggan->total() }} entries
+                    </div> --}}
+                              <!-- PAGINATION SECTION -->
+                <div class="p-4 border-top">
+                    <div class="d-flex justify-content-between align-items-center flex-column flex-md-row">
+                        <div class="text-muted small mb-3 mb-md-0">
+                            <svg class="icon icon-xs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            Menampilkan {{ $dataPelanggan->firstItem() ?? 0 }} - {{ $dataPelanggan->lastItem() ?? 0 }} dari {{ $dataPelanggan->total() }} user
+                        </div>
+                        <div>
+                            {{ $dataPelanggan->appends(request()->query())->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

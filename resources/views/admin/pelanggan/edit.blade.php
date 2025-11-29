@@ -236,7 +236,7 @@
                                                         </h6>
                                                         <small class="text-muted">
                                                             {{ strtoupper($extension) }} • 
-                                                            {{ \Carbon\Carbon::parse($file->created_at)->format('d/m/Y H:i') }}
+                                                            {{ \Carbon\Carbon::parse($file->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i') }}
                                                         </small>
                                                     </div>
 

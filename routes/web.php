@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PegawaiController;
@@ -38,12 +39,27 @@ Route::get('/home', [HomeController::class, 'index']);
 Route::get('/pegawai', [PegawaiController::class, 'index']);
 Route::post('question/store', [QuestionController::class, 'store'])
     ->name('question.store');
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
 Route::resource('pelanggan', PelangganController::class);
 
 // route('pelanggan.update', $dataPelanggan->pelanggan_id)
+Route::get('/auth', [AuthController::class, 'index']);
+Route::post('auth/login', [AuthController::class, 'login'])
+    ->name('auth.login');
+Route::get('/regisvolt', function () {
+    return view('admin/sig-up');
+})
+    ->name('regisvolt');
 
+Route::post('/register', [AuthController::class, 'register'])
+    ->name('auth.register');
 
+Route::get('/logvolt', function () {
+    return view('admin/sig-in');
+})
+    ->name('logvolt');
 Route::resource('user', UserController::class);
 
 // Routes untuk multiple upload
