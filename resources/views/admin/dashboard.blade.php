@@ -321,7 +321,7 @@
 												<!-- Avatar -->
 												<a href="#" class="avatar">
 													<img class="rounded" alt="Image placeholder"
-														src="assets-admin/img/team/profile-picture-4.jpg">
+														src="assets-admin/img/hitler.jpg">
 												</a>
 											</div>
 											<div class="col-auto ms--2">
@@ -469,9 +469,9 @@
 						<div class="profile-cover rounded-top" data-background="assets-admin/img/profile-cover.jpg"
 							style="background: url(&quot;assets-admin/img/profile-cover.jpg&quot;);"></div>
 						<div class="card-body pb-5">
-							<img src="assets-admin/img/team/profile-picture-1.jpg"
+							<img src="assets-admin/img/team/profile-picture-2.jpg"
 								class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
-							<h4 class="h3">Neil Sims</h4>
+							<h4 class="h3">Fahrezy</h4>
 							<h5 class="fw-normal">Senior Software Engineer</h5>
 							<p class="text-gray mb-4">New York, USA</p>
 							<a class="btn btn-sm btn-gray-800 d-inline-flex align-items-center me-2" href="#">
